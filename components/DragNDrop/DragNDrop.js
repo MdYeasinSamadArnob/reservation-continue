@@ -6,7 +6,7 @@ const ReactGridLayout = WidthProvider(RGL);
 
 export default class DragNDrop extends React.PureComponent {
   static defaultProps = {
-    className: 'layout bg-gray-500 overflow-hidden h-full ',
+    className: 'layout bg-gray-300 overflow-hidden h-full ',
     items: 10,
     cols: 12,
     rowHeight: 30,
@@ -31,7 +31,7 @@ export default class DragNDrop extends React.PureComponent {
   generateDOM() {
     return _.map(_.range(this.props.items), function (i) {
       return (
-        <div key={i} className="bg-gray-500 border-black border-2 ">
+        <div key={i} className="bg-gray-600 border-black border-2 ">
           <span className=" text-center">{i}</span>
         </div>
       );

@@ -1,13 +1,18 @@
+import { Layout, Menu, Breadcrumb } from 'antd';
+import React from 'react';
 import {
   DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
+  FileOutlined,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu } from 'antd';
-import React, { useState } from 'react';
+// import DragNDropTest from '../DragNDrop/DragNDropTest';
+// import HeaderMain from '../Header/Header';
+// import GridView from '../GridView/GridView';
+// import GridView2 from '../GridView/GridView2';
 import DragNDrop from '../DragNDrop/DragNDrop';
+
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -20,12 +25,13 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
+  getItem('Floor', '1', <PieChartOutlined />),
+  getItem('Grid', '2', <DesktopOutlined />),
+  getItem('Timeline', '3', <DesktopOutlined />),
   getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
+    getItem('Tom', '4'),
+    getItem('Bill', '5'),
+    getItem('Alex', '6'),
   ]),
   getItem('Team', 'sub2', <TeamOutlined />, [
     getItem('Team 1', '6'),
@@ -34,67 +40,134 @@ const items = [
   getItem('Files', '9', <FileOutlined />),
 ];
 
-const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
-    >
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={['1']}
-          mode="inline"
-          items={items}
-        />
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          className="site-layout-background"
+class Sidebar extends React.Component {
+  state = {
+    collapsed: false,
+    key: '1',
+  };
+  onCollapse = (collapsed) => {
+    console.log(collapsed);
+    this.setState({
+      collapsed,
+    });
+  };
+
+  handleChange = ({ item, key, keyPath, domEvent }) => {
+    console.log(item, key, keyPath, domEvent);
+    this.setState({ key });
+  };
+
+  showContent = () => {
+    if (this.state.key === '1') {
+      return (
+        <div className="grid grid-cols-12 w-full">
+          <div className="h-full col-span-4 lg:col-span-3 ">
+            This is options place
+          </div>
+          <Layout className="site-layout col-span-8 lg:col-span-9 ">
+            <Header
+              className="site-layout-background"
+              style={{
+                padding: 0,
+              }}
+            >
+              <div> Go Back</div>
+            </Header>
+            <Content
+              className="site-layout-background"
+              style={{
+                //   margin: '0 16px 0 0',
+                padding: '0 8px 0 0',
+                minHeight: '92%',
+              }}
+            >
+              <DragNDrop />
+            </Content>
+          </Layout>
+        </div>
+      );
+    } else if (this.state.key === '2') {
+      return (
+        <div className="w-full overflow-scroll h-full">
+          {/* <h1>About</h1>
+        <p>This is the about page</p> */}
+          {/* <GridView/> */}
+          <GridView2 />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h1>Contact</h1>
+          <p>This is the contact page</p>
+        </div>
+      );
+    }
+  };
+
+  render() {
+    const { collapsed } = this.state;
+    return (
+      <>
+        {/* <HeaderMain/> */}
+        {/* <div className="bg-green-500 fixed top-0">This is Header For Info Related Stuffs</div> */}
+        <Layout
           style={{
-            padding: 0,
-          }}
-        />
-        <Content
-          style={{
-            margin: '0 16px',
+            minHeight: '95vh',
           }}
         >
-          <Breadcrumb
-            style={{
-              margin: '16px 0',
-            }}
+          <Sider
+            className="pt-5"
+            collapsible
+            collapsed={collapsed}
+            onCollapse={this.onCollapse}
           >
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
+            <div className="logo" />
+            <Menu
+              onClick={this.handleChange}
+              theme="dark"
+              defaultSelectedKeys={['1']}
+              mode="inline"
+              items={items}
+            />
+          </Sider>
+          {/* Here is the content parts */}
+          {/* <div 
+        className="grid grid-cols-12 w-full"
+        
+        >
+            <div className='h-full col-span-4 lg:col-span-3 '>
+                This is options place
+            </div>
+        <Layout className="site-layout col-span-8 lg:col-span-9 ">
+          <Header
             className="site-layout-background"
             style={{
-              padding: 24,
-              minHeight: 360,
+              padding: 0,
             }}
           >
-            <DragNDrop />
-          </div>
-        </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
-      </Layout>
-    </Layout>
-  );
-};
+            <div> Go Back</div>
+            </Header>
+          <Content
+          className="site-layout-background"
+            style={{
+            //   margin: '0 16px 0 0',
+              padding: '0 8px 0 0',
+                minHeight: "92%",
+            }}
+          >
+            
+           <DragNDropTest/>
+           
+          </Content>
+          
+        </Layout>
+        </div> */}
+          {this.showContent()}
+        </Layout>
+      </>
+    );
+  }
+}
 
-export default Sidebar;
+export default () => <Sidebar />;
